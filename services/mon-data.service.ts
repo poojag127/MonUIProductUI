@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
 import { Message } from 'primeng/primeng';
+import { CavConfigService } from '../../../main/services/cav-config.service';
+import { CavTopPanelNavigationService } from '../../../main/services/cav-top-panel-navigation.service';
+
 
 
 @Injectable()
@@ -23,8 +26,41 @@ export class MonDataService {
     private serviceURL: string = "http://10.10.40.7:8006/ProductUI/productSummary/MonitorWebService/";
 
 
-    constructor() {
+   constructor(private _productConfig: CavConfigService, private _navService: CavTopPanelNavigationService) {
+        //need to change
+        this.serviceURL = this._productConfig.getINSPrefix() + this._navService.getDCNameForScreen('monitorgui') + "/ProductUI/productSummary/MonitorWebService/";
+    }
 
+     public initConfiguration()
+     {
+       try
+        {
+          /*Checking for availability of session. */
+          if (this._productConfig.$userName == null) {
+            // this.log.info('Session not available. Restoring session.');
+            this._productConfig.restoreConfiguration();
+           }
+
+          this.userName = this._productConfig.$userName;
+          
+          if(this._productConfig.$featurePermissionList) {
+              //need to changes
+            let featurePermList = this._productConfig.$featurePermissionList["Start/Stop Test"];
+      
+            if(featurePermList == 7) {
+                this.userRole = 'admin';
+            }
+            else if(featurePermList > 4 && featurePermList < 7) {
+              this.userRole = 'normal';
+            }
+            else {
+              this.userRole = 'guest';
+            }
+          }
+        }
+        catch(e) {
+            console.error('initConfiguration | exception e = ', e);
+        }
     }
 
     setTestRunNum(testRunNum: number) {

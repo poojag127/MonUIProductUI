@@ -358,13 +358,16 @@ export class CavMonConfigurationComponent implements OnInit {
 
  addData()
  {
-   /**Check for whether following combination of server name and app name existing in the table or not */
-   if(this.validateAppNameAndServerName())
+   /** Check for whether following combination of server name and app name existing in the table or not 
+    * this.isNewConfig flag used so that this validation is used only in case of add not edit
+    */
+   if(this.isNewConfig && this.validateAppNameAndServerName())
    {
      console.log("this.validateAppNameAndServerNam()-changeddd-",(this.validateAppNameAndServerName()))
      this.messageService.errorMessage("Following combination of server name and app name already exists.Please enter different server name or app name")
      return;
    }
+
    console.log("compArgs--",this.compArgs)
    console.log("selectedTableDta-",this.formData)
    let option = '';         // for column to display to the user
@@ -428,31 +431,46 @@ export class CavMonConfigurationComponent implements OnInit {
     this.tableAccordionState = false;
  }
 
- /** 
-  * Method to validate following combination of server name and app name 
-  * do exists in the configuration table or not
-  */
-  validateAppNameAndServerName() : boolean
-  {
-     let key = this.formData.serverName + this.formData.appName; // variable to hold server name and coresponding app name
-     console.log("key ---", key)
- /*****TO DO   */
-    // if(this.tempArr.includes(key))
-    //    return true;
-    //  else
-    //  {
-    //     this.tempArr.push(key); // add the key in a temporary array 
-    //     return false;
-    //  }
-     return false;
-  }
 
- 
-    /**This method returns selected row on the basis of Id */
+  /**This method returns selected row on the basis of Id */
    getSelectedRowIndex(data): number 
    {
     let index = this.tableData.findIndex(each => each["id"] == data)
     return index;
+   }
+
+
+
+  /** 
+   * Method to validate following combination of server name and app name 
+   * do exists in the configuration table or not
+   */
+  validateAppNameAndServerName(): boolean 
+  {
+    let key = this.formData.serverName + this.formData.appName; // variable to hold server name and coresponding app name
+
+    let keyFound = _.find(this.tempArr, function (each) { return each == key })
+
+    /**** Check whether the key already exist or not in the tempArr 
+     * if found then return else add the key to the tempArr
+     */
+    if (keyFound)
+      return true;
+    else {
+      this.tempArr.push(key);
+      return false
+    }
+  }
+
+
+  openAddDialog()
+  {
+
+  }
+
+  deleteApp()
+  {
+    
   }
 
 

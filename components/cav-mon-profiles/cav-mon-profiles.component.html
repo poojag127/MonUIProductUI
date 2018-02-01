@@ -24,7 +24,7 @@
                 </div>
             </p-header>
 
-            <p-column [style]="{'width':'32px'}" selectionMode="multiple"></p-column>
+            <p-column [style]="{'width':'21px'}" selectionMode="multiple"></p-column>
             <p-column [style]="{'width':'150px'}" class="col-overflow" field="profileName" header="Profile Name" [sortable]="true" [filter]="isShowFilter">
                 <template let-col let-json="rowData" pTemplate type="body">
                     <span title="{{json[col.field]}}"> <a class="hyperlink" (click)="routeToConfiguration(json['profileName'],selectedTopology)" >{{json[col.field]}}</a></span>
@@ -51,7 +51,7 @@
 
             <p-column  [style]="{'width':'218px'}" class="col-overflow" field="lastUpdatedOn" header="Last Modified" [sortable]="true" [filter]="isShowFilter">
                 <template let-col let-json="rowData" pTemplate type="body">
-                           <span style="margin-left :123px" title="{{json[col.field]}}">{{json[col.field]}}</span>
+                           <span style="margin-left :136px" title="{{json[col.field]}}">{{json[col.field]}}</span>
                         </template>
             </p-column>
 
@@ -74,7 +74,7 @@
 
     <!--Dialog for adding MJson-->
 
-    <p-dialog class="profile-dialog" header="{{isNewMJson ? 'New MJson' : 'Edit MJson'}}" *ngIf="addProfileDialog" [(visible)]="addProfileDialog"
+    <p-dialog class="profile-dialog" header="Add Profile" *ngIf="addProfileDialog" [(visible)]="addProfileDialog"
         modal="modal" width="500" responsive="true">
         <form (ngSubmit)="saveEditProfile(selectedTopology, addProfile)" #groupForm="ngForm" ngNativeValidate>
             <div class="ui-g">

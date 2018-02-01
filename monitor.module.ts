@@ -13,7 +13,7 @@ import { Logger, Options as LoggerOptions, Level as LoggerLevel } from '../../..
 import { AccordionModule, DataTableModule, ContextMenuModule, MultiSelectModule, 
   ConfirmDialogModule, InputTextModule, ButtonModule, DialogModule, DropdownModule, FieldsetModule, RadioButtonModule,
   CheckboxModule, ListboxModule, InputTextareaModule, TreeTableModule,SharedModule, FileUploadModule, PaginatorModule, PanelModule, SpinnerModule,
-  GrowlModule,BreadcrumbModule
+  GrowlModule,BreadcrumbModule,MessagesModule
 } from 'primeng/primeng';
 
 import { BlockUIModule } from 'ng-block-ui';
@@ -47,6 +47,8 @@ import { MonitorRoutingModule } from './routes/monitor-routing.routes';
 import { MonitorReducer } from './reducers/monitor-reducer';
 import { MonitorCompReducer } from './reducers/monitor-comp-reducer';
 
+import { CavMonContentsComponent } from './components/cav-mon-contents/cav-mon-contents.component';
+
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { MonitorCompReducer } from './reducers/monitor-comp-reducer';
 
   CavMonHomeComponent,
 
-  CavMonRightPaneComponent
+  CavMonRightPaneComponent,
+
+  CavMonContentsComponent
   
   ],
   
@@ -108,6 +112,7 @@ import { MonitorCompReducer } from './reducers/monitor-comp-reducer';
     MonitorRoutingModule,
     GrowlModule,
     BreadcrumbModule,
+    MessagesModule,
     StoreModule.provideStore({ monitorData: MonitorReducer ,selectedMon:MonitorCompReducer}),
   ],
   providers: [

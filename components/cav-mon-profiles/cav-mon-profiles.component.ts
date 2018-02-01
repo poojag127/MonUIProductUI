@@ -69,7 +69,6 @@ export class CavMonProfilesComponent implements OnInit {
     this.addProfileDialog = true;
     this.addProfile = new ProfileData();
   }
-
   saveEditProfile(topoName, addProfile) {
 
     this.addProfileDialog = false;
@@ -78,7 +77,8 @@ export class CavMonProfilesComponent implements OnInit {
     this.monConfServiceObj.setProfileDesc(addProfile.desc);
     this.monConfServiceObj.setTopoName(topoName);
     this.router.navigate([URL.PROF_CONFIGURATION]);
-    this.monConfServiceObj.clearSaveMonData();      
+    this.monConfServiceObj.clearSaveMonData();
+
     //to insert new row in table ImmutableArray.push() is created as primeng 4.0.0 does not support above line 
     //this.jsonsTableData=ImmutableArray.push(this.jsonsTableData, this.mJsonData);
   }
@@ -141,25 +141,26 @@ export class CavMonProfilesComponent implements OnInit {
     this.selectedProfile = [];
   }
 
-  /**
+ /**
    * This method is used to download/import the json file 
    * for the selected monitor profile.
    */
-  // importProfile(profile) {
-  //   /***download file directly in server  */
-  //   //let url = window.location.protocol + "//"+ window.location.hostname +":"+window.location.port; 
+  importProfile(profile) {
+    /***download file directly in server  */
+    // let url = window.location.protocol + "//"+ window.location.hostname +":"+window.location.port; 
 
-  //   /***to download file in local */
-  //   let url = `${URL.HOST_NAME}`;
+    /***to download file in local */
+    let url = this.dataService.getserviceURL();
+    console.log("url-----", url)
 
-  //   this.monConfServiceObj.getMprof(this.selectedTopology, profile.profileName).subscribe(data => {
-  //     if (data) {
-  //       let path = url + "/netstorm/temp/";
-  //       path = path + profile.profileName + ".json";
-  //       this.downloadURI(path, profile.profileName + ".json");
-  //     }
-  //   })
-  // }
+    this.profileService.downloadProfile(this.selectedTopology, profile.profileName).subscribe(data => {
+      if (data) {
+        let path = url + "netstorm/temp/";
+        path = path + profile.profileName + ".json";
+        this.downloadURI(path, profile.profileName + ".json");
+      }
+    })
+  }
 
 
   /** This method is used to make the download link to download the selected json file */
@@ -177,7 +178,11 @@ export class CavMonProfilesComponent implements OnInit {
 
     link.dispatchEvent(clickEvent);
   }
+ 
+ exportProfile()
+ {
 
+ }
 
 }
 
