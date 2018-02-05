@@ -32,6 +32,10 @@ export class MonConfigurationService {
     /** Used to hold selected row object of treetabledata  ****/
     selectedRow:{} = {};
 
+    /** Used to hold checkBoxState */
+    checkBoxStateArr :any[] = [];
+
+
     constructor(private http: Http, private _restApi: RestApiService,
                 private monDataService: MonDataService,
                 private store: Store<any>,
@@ -118,7 +122,7 @@ export class MonConfigurationService {
                 this.modifyDataForColorMode(res);
                 let nodeData = _.find(this.monTierTreeTableData, function (each) { return each['data']['monitor'] == categoryName });
                 nodeData['children'] = res;
-                console.log("----------\n after adding children---", this.monTierTreeTableData[id]);
+                console.log("----------\n after adding children---", this.monTierTreeTableData);
                 console.log("--zzzzz--------\n");
                 console.log("getChildNodes method called--", res)
             }).
@@ -172,6 +176,39 @@ export class MonConfigurationService {
         }
         rowData["compArgsJson"] = data;
         console.log("monTierTreeTableData--", this.monTierTreeTableData)
+    }
+
+
+
+  /**here we are maintaining the state of all checkboxes as changed by the user ***/
+
+    addUpdateCheckBoxStateArr(tierVal,key)
+    {
+        console.log("tierVal --",tierVal)
+      let isEntryExist:boolean = false;
+      let colorMode = tierVal['color'];
+   
+      for(let i = 0;i < this.checkBoxStateArr.length; i++)
+      {
+       if(Object.keys(this.checkBoxStateArr[i])[0] == key)
+       {
+        isEntryExist = true;
+        this.checkBoxStateArr[i][key] = tierVal['chk'];
+        this.checkBoxStateArr[i]['colorMode'] = colorMode;
+        break;
+       }
+      }
+
+      if(!isEntryExist)
+      {
+       let obj = {[key]: tierVal['chk'],'colorMode':colorMode}
+       this.checkBoxStateArr.push(obj)
+      }
+      console.log("this.checkBoxStateArr--",this.checkBoxStateArr)
+    }
+
+    getChkBoxStateArr() {
+     return this.checkBoxStateArr;
     }
 
    
@@ -324,6 +361,7 @@ export class MonConfigurationService {
    console.log("Method updateColorModeAndName Called   data   = ",data)
    let checkBoxState = data[tierName]['chk'];
    let colorMode = this.getColorMode(data,checkBoxState,tierName)
+   console.log("colorMode in  updateColorModeAndName-",colorMode)
    let tierVal = data[tierName];
    tierVal['color'] = colorMode;
    this.updateColorName(tierVal);
@@ -397,6 +435,9 @@ export class MonConfigurationService {
        {
           return COLOR_CODE.UNCHECKED_COMPPRESENT_NOTCONFIGURED; 
        }
+      }
+      else{
+          return COLOR_CODE.UNCHECKED_COMPPRESENT_NOTCONFIGURED;
       }
     } 
     else //case of System monitors which do not require configurations

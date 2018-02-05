@@ -103,32 +103,12 @@ export class CavMonConfigurationHomeComponent implements OnInit {
    this.monConfServiceObj.updateColorModeAndName(data.data,tierName);
 
    console.log("tierName--",tierName)
-
    let monitorName = data.data['monitor'];
 
    let key = monitorName + ":"+ tierName;
-   console.log("key---" ,key)
-    
-   let isEntryExist:boolean = false;
-   let temp = this.checkBoxStateArr;
-   let colorMode = data.data[tierName]['color'];
-   for(let i = 0;i < temp.length; i++)
-   {
-     if(Object.keys(temp[i])[0] == key)
-     {
-       isEntryExist = true;
-       temp[i][key] = tierVal['chk'];
-       temp[i]['colorMode'] = colorMode;
-       break;
-     }
-   }
+   console.log("key---" ,key  + " tierVal---",tierVal)
 
-   if(!isEntryExist)
-   {
-     let obj = {[key]: tierVal['chk'],'colorMode':colorMode}
-     this.checkBoxStateArr.push(obj)
-   }
-   console.log("this.checkBoxStateArr--",this.checkBoxStateArr)
+   this.monConfServiceObj.addUpdateCheckBoxStateArr(tierVal,key);
  }
 
 
@@ -252,9 +232,10 @@ export class CavMonConfigurationHomeComponent implements OnInit {
   saveMonitorsConfigurationData()
   {
    console.log("treeTableData---",this.compData)
-   console.log(" this.checkBoxStateArr---", this.checkBoxStateArr)
    console.log("this.monConfServiceObj.saveMonitorData-",this.monConfServiceObj.saveMonitorData)
-   if(!this.validateMonConfiguredData())
+   console.log("this.validateMonConfiguredData()--",this.validateMonConfiguredData())
+   let validateVal = this.validateMonConfiguredData();
+   if(validateVal != null && !validateVal)
    {
      this.messageService.errorMessage("Please configured the enabled monitors first !!!!");
      return;
@@ -262,8 +243,11 @@ export class CavMonConfigurationHomeComponent implements OnInit {
 
    let configuredData =  JSON.parse(JSON.stringify(this.monConfServiceObj.saveMonitorData));
 
-   console.log("configuredData--",configuredData)
    let that = this;
+  
+   let checkBoxStateArr = this.monConfServiceObj.getChkBoxStateArr();
+   console.log("configuredData--",configuredData  + "checkBoxStateArr   ",checkBoxStateArr)
+
    let newTierData = {};
    
    for (var key in configuredData)
@@ -295,10 +279,18 @@ export class CavMonConfigurationHomeComponent implements OnInit {
 
       let serverMonList = that.createEachConfObject(tempObj); 
       console.log("key---" ,key)
-      console.log("that.checkBoxStateArr--",that.checkBoxStateArr)
-      console.log("getting vAL--",that.checkBoxStateArr[monName + key])
-      each[monName] = {"isEnabled" :true ,"serverDTOList":serverMonList};  //here value for isEnabled is enabling/disabling for tier
-      console.log("each- after modifying---",each)
+
+      let chkBoxStateKey = monName + ":"+ key;   //here key is tierName
+      let val = false ;
+      for(let i = 0 ; i < checkBoxStateArr.length ; i++)
+      {
+        if(checkBoxStateArr[i].hasOwnProperty(chkBoxStateKey))
+        {
+          val = checkBoxStateArr[i][chkBoxStateKey];
+        }
+      }
+      console.log("chkBoxStateKey--",chkBoxStateKey  + "   value  " , val)
+      each[monName] = {"isEnabled": val,"serverDTOList":serverMonList};  //here value for isEnabled is enabling/disabling for tier
       newTierData[key] = each ;
      })
      console.log("newTierData--",newTierData)
@@ -310,7 +302,9 @@ export class CavMonConfigurationHomeComponent implements OnInit {
 
   validateMonConfiguredData() :boolean
   {
-    let flag = this.checkBoxStateArr.map(function(each)
+    let checkBoxStateArr = this.monConfServiceObj.getChkBoxStateArr();
+    console.log("Methid validateMonConfiguredData ",checkBoxStateArr)
+    let flag = checkBoxStateArr.map(function(each)
                 {
                  console.log("each--",each)
 
@@ -326,7 +320,7 @@ export class CavMonConfigurationHomeComponent implements OnInit {
                    return true;
                 })
 
-    return flag[0];
+    return flag[0] ;
   }
 
  /**

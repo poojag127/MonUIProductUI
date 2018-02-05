@@ -243,25 +243,42 @@ export class CavMonConfigurationComponent implements OnInit {
 
   updateTableData(data)
   {
-   console.log(" updateTableData method class  monitors.comp called",data)
    let id = data['id'];
    let arrId = id.split(".");
    console.log("arrId--",arrId)
    let  obj = {} ;
-   obj = _.find(this.compArgs,function(each) {
-                 console.log("each---",each)
-                 return each.id == arrId[0];
-             })
+   obj = this.getTableTypeCompObj(this.compArgs,id);
+   console.log("obj--",obj)
+   obj["value"] = data.data;
+   console.log("this.compArgsJSon---",this.compArgs)
+  }
 
-   if(arrId.length > 1)
-   {
-    if(obj.hasOwnProperty(""))
+  getTableTypeCompObj(compArr,id)
+  {
+    let obj = {};
+    for(let i = 0; i < compArr.length ; i++)
     {
-
+      console.log("id --",compArr[i]['id'])
+      if(compArr[i]['id'] == id)
+      {
+        console.log("id matched condition")
+        obj = compArr[i];
+        break;
+      }
+      else if(compArr[i].hasOwnProperty("items") && compArr[i]["items"] != null )
+      {
+       obj = this.getTableTypeCompObj(compArr[i]["items"],id);
+       if(obj != null && Object.keys(obj).length != 0  )
+         break;
+      }
+      else if(compArr[i].hasOwnProperty("dependentComp") && compArr[i]["dependentComp"] != null)
+      {
+       obj = this.getTableTypeCompObj(compArr[i]["dependentComp"],id)
+       if(obj != null && Object.keys(obj).length != 0  )
+         break;
+      }
     }
-   }
-  
-    // obj["value"] = data.data;
+    return obj;
   }
  
  /**
