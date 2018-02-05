@@ -32,6 +32,7 @@ export class CavMonProfilesComponent implements OnInit {
   isShowFilter: boolean;
 
   addProfileDialog: boolean = false;
+  
   addProfile: ProfileData;
 
   /**This is used to emit "isShowFilter" value */
@@ -65,27 +66,30 @@ export class CavMonProfilesComponent implements OnInit {
       })
   }
 
-  openAddDialog() {
+  openAddDialog() 
+  {
     this.addProfileDialog = true;
     this.addProfile = new ProfileData();
   }
-  saveEditProfile(topoName, addProfile) {
 
+  saveEditProfile(topoName, addProfile) 
+  {
     this.addProfileDialog = false;
     this.monConfServiceObj.clearData();
     this.monConfServiceObj.setProfileName(addProfile.profileName);
     this.monConfServiceObj.setProfileDesc(addProfile.desc);
     this.monConfServiceObj.setTopoName(topoName);
     this.router.navigate([URL.PROF_CONFIGURATION]);
-    this.monConfServiceObj.clearSaveMonData();
 
     //to insert new row in table ImmutableArray.push() is created as primeng 4.0.0 does not support above line 
     //this.jsonsTableData=ImmutableArray.push(this.jsonsTableData, this.mJsonData);
   }
 
-  editProfile(jsonName, topoName) {
-    console.log(URL.PROF_CONFIGURATION + "," + jsonName + "," + topoName)
-
+  editProfile(profileName, topoName) {
+    console.log(URL.PROF_CONFIGURATION + "," + profileName + "," + topoName)
+     this.monConfServiceObj.clearData();
+    this.monConfServiceObj.setProfileName(profileName);
+    this.monConfServiceObj.setTopoName(topoName);
     this.router.navigate([URL.PROF_CONFIGURATION]);
   }
 
@@ -164,7 +168,8 @@ export class CavMonProfilesComponent implements OnInit {
 
 
   /** This method is used to make the download link to download the selected json file */
-  downloadURI(uri, name) {
+  downloadURI(uri, name)
+  {
     var link = document.createElement("a");
     console.log("link--", link)
 
@@ -182,6 +187,19 @@ export class CavMonProfilesComponent implements OnInit {
  exportProfile()
  {
 
+ }
+
+/**
+ * 
+ */
+ routeToConfiguration(profileName,selectedTopo)
+ {
+  console.log("Method routeToConfiguration called",profileName)
+  console.log("selectedTopo-",selectedTopo)
+  this.monConfServiceObj.clearData();
+  this.monConfServiceObj.setProfileName(profileName);
+  this.monConfServiceObj.setTopoName(selectedTopo);
+  this.router.navigate([URL.PROF_CONFIGURATION]);
  }
 
 }

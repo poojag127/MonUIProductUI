@@ -16,8 +16,7 @@ export class CavMonDynamicComponentsComponent implements OnInit {
   @Output()
   updateTableVal = new EventEmitter();
 
-
-  constructor() { }
+  constructor() { } 
 
   ngOnInit() {
     console.log("Class RenderCompComponent called ")
@@ -34,6 +33,4 @@ export class CavMonDynamicComponentsComponent implements OnInit {
     console.log("renderCompData Method Called tableData--", data)
     this.updateTableVal.emit(data)
   }
-
-
 }

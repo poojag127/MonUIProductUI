@@ -28,7 +28,7 @@ export class MonDataService {
 
    constructor(private _productConfig: CavConfigService, private _navService: CavTopPanelNavigationService) {
         //need to change
-        this.serviceURL = this._productConfig.getINSPrefix() + this._navService.getDCNameForScreen('monitorgui') + "/ProductUI/productSummary/MonitorWebService/";
+        // this.serviceURL = this._productConfig.getINSPrefix() + this._navService.getDCNameForScreen('monitorgui') + "/ProductUI/productSummary/MonitorWebService/";
     }
 
      public initConfiguration()

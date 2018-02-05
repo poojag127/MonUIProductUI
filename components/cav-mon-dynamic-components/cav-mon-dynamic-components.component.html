@@ -15,8 +15,8 @@
 </span>
 
 <span *ngIf="item['type'] == 'Checkbox'" class="spanClass">   
-          <p-checkbox  binary="false"  [disabled]="disabled" name="item.label" [(ngModel)]="item.value " label="{{item.label}}" ></p-checkbox>
-        </span>
+   <p-checkbox  binary="false"  [disabled]="disabled" name="item.label" [(ngModel)]="item.value " label="{{item.label}}" ></p-checkbox>
+  </span>
 
 <span *ngIf="item['type'] == 'Spinner'" class="spanClass">
              <label *ngIf="item['type']== 'Spinner'" style="margin-right: 2%;">{{item.label}}</label>

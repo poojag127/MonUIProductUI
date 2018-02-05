@@ -1,0 +1,2 @@
+
+ export const ROUTING_PATH: string = "/home/monitor";

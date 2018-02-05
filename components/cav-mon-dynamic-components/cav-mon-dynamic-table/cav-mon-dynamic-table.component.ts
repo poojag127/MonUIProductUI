@@ -99,7 +99,8 @@ export class CavMonDynamicTableComponent implements OnInit {
  /** For EDIT Functionality-
   * This method is used to show EDIT Dialog for editing existing entries in the dataTable 
   */
-  openEditDialog(){
+  openEditDialog()
+  {
     this.dialogHeaderForTable = "Edit " + this.headerForTable;
     console.log("openEditDialog method called",this.selectedJson );
     if (!this.selectedJson || this.selectedJson.length < 1) 

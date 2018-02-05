@@ -27,7 +27,7 @@ export class CavMonConfigurationComponent implements OnInit {
 
   subscription: Subscription;
 
-   subscriptionConfiguredData: Subscription;
+  subscriptionConfiguredData: Subscription;
   
   tierField:string;
 
@@ -64,6 +64,9 @@ export class CavMonConfigurationComponent implements OnInit {
 
   /**Counter for adding id to the tableData */
    count: number = 0;
+
+   /***variable used for holding the state of checkbox */
+   checkBoxState:boolean = false;
    
   /** This boolean variable is used to hold the state of the accordion which holds the configured data table
    *  i.e. the second accordion of the configuration screen  
@@ -85,7 +88,7 @@ export class CavMonConfigurationComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log("Class CavMonConfiguration loaded")
+    console.log("Class CavMonConfiguration loaded changed---")
 
     this.formData = new TableData();
     this.route.params.subscribe((params: Params) => {
@@ -100,7 +103,10 @@ export class CavMonConfigurationComponent implements OnInit {
     this.getTableData();
     
     /** getting data of monitor selected ****/
-    let data = this.monConfigurationService.compArgData;
+    let data = this.monConfigurationService.compArgData['data'];
+
+    console.log("data ---",data)
+
     if(data != null &&  Object.keys(data).length != 0)  /***handling case when data ="{}"****/
     {
       this.compArgs = data;
@@ -206,7 +212,6 @@ export class CavMonConfigurationComponent implements OnInit {
     console.log("eachComp component radio buttons--",eachComp)
    }
  
-
    if(eachComp["type"] == 'Table')
    {
      console.log("dispatching store for table data")
@@ -239,12 +244,24 @@ export class CavMonConfigurationComponent implements OnInit {
   updateTableData(data)
   {
    console.log(" updateTableData method class  monitors.comp called",data)
-   let obj =_.find(this.compArgs,function(each) {
-     console.log("each---",each)
-      return each.id == data.id
-    })
-    console.log("obj---",obj)
-   obj["value"] = data.data;
+   let id = data['id'];
+   let arrId = id.split(".");
+   console.log("arrId--",arrId)
+   let  obj = {} ;
+   obj = _.find(this.compArgs,function(each) {
+                 console.log("each---",each)
+                 return each.id == arrId[0];
+             })
+
+   if(arrId.length > 1)
+   {
+    if(obj.hasOwnProperty(""))
+    {
+
+    }
+   }
+  
+    // obj["value"] = data.data;
   }
  
  /**
@@ -477,11 +494,14 @@ export class CavMonConfigurationComponent implements OnInit {
 
  ngOnDestroy() 
  {
-  console.log("moving out of compoent--",this.tableData)
+  console.log("moving out of compoent--",this.tableData + "   this.monConfigurationService.getSelectedRow  =" +this.monConfigurationService.getSelectedRow())
     // var newData = _.map(this.tableData, function(o) { return _.omit(o, 'arguments'); });
   let obj = {"tier":this.tierName,"data":this.tableData,"monName":this.monName}
-  // this.store.dispatch({ type:"CONFIGURED_MONDATA" ,payload:obj });
+  
   this.monConfigurationService.saveConfiguredData(obj);
+
+  /*** for updating colormode and colorName ***/  
+  this.monConfigurationService.updateColorModeAndName(this.monConfigurationService.getSelectedRow(),this.tierName)
 
   if (this.subscription)
       this.subscription.unsubscribe();
