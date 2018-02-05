@@ -1,20 +1,20 @@
 <div class="main-box">
-    <div style="margin: 21px 0px">
-        <p-fieldset [style]="{'font-size':'13px' }" legend="Select Topology">
+    <div class="monitor-fieldset">
+        <p-fieldset legend="Select Topology">
             <div class="ui-g-9">
-                <p-dropdown [style]="{'width':'60%' ,'font-size':'13px'}" class="homedropdown" [options]="topologyList" [(ngModel)]="selectedTopology"
+                <p-dropdown [style]="{'width':'60%'}" class="homedropdown" [options]="topologyList" [(ngModel)]="selectedTopology"
                     (onChange)="loadProfileData($event.value)"></p-dropdown>
             </div>
         </p-fieldset>
     </div>
 
-    <div class="ui-g mon-hometable">
+    <div class="ui-g">
         <!--For showing Session Attribute(s) list -->
-        <p-dataTable class="mon-ui" [value]="profileTableData" [(selection)]="selectedProfile" [rows]="5" [paginator]="profileTableData?.length >10"
-            [pageLinks]="3" [style]="{'height':'200px'}">
-            <p-header>
-                <span style="font-size:13px"><b>Available Monitor Profile(s)</b></span>
-                <div class="appIcon-css">
+        <p-dataTable class="monitor-ui-table" [value]="profileTableData" [(selection)]="selectedProfile" [rows]="5" [paginator]="profileTableData?.length >10"
+            [pageLinks]="3">
+            <p-header class="monitor-header">
+                <span class="monitor-header-text">Available Monitor Profile(s)</span>
+                <div class="monitor-btn-right">
                     <!-- <button pButton class="toolbarIcon" type="button" icon="fa-pencil" (click)="editConfigData()" title="Edit Configuration"></button> -->
                     <button pButton class="toolbarIcon" *ngIf="!isShowFilter" type="button" icon="fa-search" (click)="showFilter()" title="Show Filter"></button>
                     <button pButton class="toolbarIcon" *ngIf="isShowFilter" type="button" icon="fa-search" (click)="showFilter()" title="Hide Filter"></button>
@@ -51,7 +51,7 @@
 
             <p-column  [style]="{'width':'218px'}" class="col-overflow" field="lastUpdatedOn" header="Last Modified" [sortable]="true" [filter]="isShowFilter">
                 <template let-col let-json="rowData" pTemplate type="body">
-                           <span style="margin-left :136px" title="{{json[col.field]}}">{{json[col.field]}}</span>
+                           <span style="float:right" title="{{json[col.field]}}">{{json[col.field]}}</span>
                         </template>
             </p-column>
 
@@ -74,7 +74,7 @@
 
     <!--Dialog for adding MJson-->
 
-    <p-dialog class="profile-dialog" header="Add Profile" *ngIf="addProfileDialog" [(visible)]="addProfileDialog"
+    <p-dialog class="profile-dialog monitor-dialog" header="Add Profile" *ngIf="addProfileDialog" [(visible)]="addProfileDialog"
         modal="modal" width="500" responsive="true">
         <form (ngSubmit)="saveEditProfile(selectedTopology, addProfile)" #groupForm="ngForm" ngNativeValidate>
             <div class="ui-g">

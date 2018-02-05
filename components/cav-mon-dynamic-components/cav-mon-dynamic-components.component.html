@@ -37,14 +37,14 @@
 </span>
 </span>
 
- <span *ngIf="item['type'] == 'FieldSet'" class="fieldSetCss">
-         <p-fieldset  [style]="{'font-size':'13px' }"  legend={{item.label}} [toggleable]="true" collapsed="true">
+ <span *ngIf="item['type'] == 'FieldSet'" class="monitor-fieldset">
+         <p-fieldset  legend={{item.label}} [toggleable]="true" collapsed="true">
             <span  *ngIf="item.dependentComp != null" >
               <app-cav-mon-dynamic-dependent-comp  (updateTableVal)="updateTableValue($event)"   [dependentCompData]="item.dependentComp"></app-cav-mon-dynamic-dependent-comp>
             </span>
-  </p-fieldset>
+          </p-fieldset>
   </span>
 
-<div class="tableCss" *ngIf="item['type'] == 'Table'">
+<div class="monitor-ui-table" *ngIf="item['type'] == 'Table'">
   <app-cav-mon-dynamic-table *ngIf="item['type'] == 'Table'" (updateTableVal)="updateTableValue($event)" [tableCompData]="item" [disabled]="disabled"></app-cav-mon-dynamic-table>
 </div>

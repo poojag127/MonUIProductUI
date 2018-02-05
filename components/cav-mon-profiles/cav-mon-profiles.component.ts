@@ -184,6 +184,11 @@ export class CavMonProfilesComponent implements OnInit {
 
  }
 
+ /**This method is called when user clicks the hyperlink of the profileName in the profile list  */
+ routeToConfiguration(topoName,profileName){
+  this.router.navigate([URL.PROF_CONFIGURATION]);
+ }
+
 }
 
 
