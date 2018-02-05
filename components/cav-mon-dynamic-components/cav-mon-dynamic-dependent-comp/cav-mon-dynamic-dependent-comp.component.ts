@@ -5,6 +5,7 @@ import { Component, OnInit ,Input,Output,EventEmitter} from '@angular/core';
   templateUrl: './cav-mon-dynamic-dependent-comp.component.html',
   styleUrls: ['./cav-mon-dynamic-dependent-comp.component.css']
 })
+
 export class CavMonDynamicDependentCompComponent implements OnInit {
 
   @Input()
@@ -21,11 +22,11 @@ export class CavMonDynamicDependentCompComponent implements OnInit {
   ngOnInit() 
   {
     console.log("Class DependentCompComponent called ")
-
   }
 
   updateTableValue(data)
   {
+   console.log("in dynamic dependent comppp data--",data)
    this.updateTableVal.emit(data);
   }
 

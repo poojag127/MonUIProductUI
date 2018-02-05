@@ -40,6 +40,9 @@ import { MonConfigurationService } from './services/mon-configuration.service';
 import { CavMonConfigurationRoutingComponent } from './components/cav-mon-configuration-home/cav-mon-configuration-routing/cav-mon-configuration-routing.component';
 import { StoreModule } from '@ngrx/store';
 
+//utility
+// import { ColorCodeData } from './utility/color-code-data';
+
 /** Routing Module */
 import { MonitorRoutingModule } from './routes/monitor-routing.routes';
 

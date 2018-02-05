@@ -12,10 +12,10 @@ import { CavMonHomeComponent } from '../components/cav-mon-home/cav-mon-home.com
     { path: '', component: CavMonHomeComponent ,children:[
     { path: '', redirectTo:'home', pathMatch: 'full' },
     { path:'home',component:CavMonProfilesComponent},
-    { path: 'configuration', component: CavMonConfigurationRoutingComponent, children: [
+    { path:'configuration', component: CavMonConfigurationRoutingComponent, children: [
       { path:'', redirectTo:'configuration', pathMatch: 'full' },
-      { path: 'configuration', component:CavMonConfigurationHomeComponent },
-      { path: 'monConfiguration/:mjsonName/:topoName/:monName/:tierId/:tierName', component: CavMonConfigurationComponent }
+      { path:'configuration', component:CavMonConfigurationHomeComponent },
+      { path:'monConfiguration/:mjsonName/:topoName/:monName/:tierId/:tierName', component: CavMonConfigurationComponent }
     ]
   }
  ]

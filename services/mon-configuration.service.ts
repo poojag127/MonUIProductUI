@@ -8,6 +8,8 @@ import { MonDataService } from './mon-data.service';
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import * as _ from "lodash";
 import { Store } from '@ngrx/store';
+import { ColorCodeData } from '../containers/color-code-data';
+import * as COLOR_CODE from '../constants/colorcode-constants';
 
 @Injectable()
 export class MonConfigurationService {
@@ -21,12 +23,14 @@ export class MonConfigurationService {
 
     tierHeaderList: any[] = null;
 
-    /***hold components array of components ***/
+    /*** hold components array of components ***/
     compArgData: any[];
 
-
-    /***Used to hold the configured data of monitor */
+    /*** Used to hold the configured data of monitor ****/
     saveMonitorData: {};  
+    
+    /** Used to hold selected row object of treetabledata  ****/
+    selectedRow:{} = {};
 
     constructor(private http: Http, private _restApi: RestApiService,
                 private monDataService: MonDataService,
@@ -52,12 +56,44 @@ export class MonConfigurationService {
             .then(res => {
                 this.tierHeaderList = res["tierList"];
                 console.log("Getting from server tierList--", this.tierHeaderList)
-                this.monTierTreeTableData = res["treeTableData"]["data"];
-
+                let data = res["treeTableData"]["data"];
+                this.modifyDataForColorMode(data);
+                this.monTierTreeTableData  = data;
             }).
             catch(this.handleError);
     }
 
+
+
+    /**
+     * 
+     * @param data 
+     */
+
+    modifyDataForColorMode(data)
+    {
+     console.log("data--",data)
+     console.log("colorCodeComboMap---",ColorCodeData)
+     let that = this;
+     data.map(function(eachMon)
+     {
+      console.log("eachMon--",eachMon)
+      let rowObj = eachMon["data"];
+      for(var tier in rowObj)
+      {
+        let value =  rowObj[tier];   //here value = {chk: false, color: -1}
+        console.log("color code-valuevaluevaluevalue------",value)
+        that.updateColorName(value);
+        console.log("rowObj--",rowObj)
+     }
+     })
+    }
+   
+    updateColorName(value)
+    {
+     if(value.hasOwnProperty('color'))
+        value['colorName'] = ColorCodeData.getColor(value['color']);
+    }
 
 
     /**** This method sends request to server for getting  *****/
@@ -79,6 +115,7 @@ export class MonConfigurationService {
         return this.http.get(url, { search: params }).map(res => res.json())
             .toPromise()
             .then(res => {
+                this.modifyDataForColorMode(res);
                 let nodeData = _.find(this.monTierTreeTableData, function (each) { return each['data']['monitor'] == categoryName });
                 nodeData['children'] = res;
                 console.log("----------\n after adding children---", this.monTierTreeTableData[id]);
@@ -104,12 +141,11 @@ export class MonConfigurationService {
         return this.http.get(url, { search: params }).map(res => res.json())
             .toPromise()
             .then(res => {
-
                 this.addComponentsData(id, res)
                 let obj = {};
                 obj['data'] = res,
                 obj['id'] = id;
-                this.setCompArgsData(obj);
+                 this.setCompArgsData(obj);
                 this.store.dispatch({type:"ADD_COMPONENTS_DATA",payload: obj });
             }).
             catch(this.handleError);
@@ -138,15 +174,11 @@ export class MonConfigurationService {
         console.log("monTierTreeTableData--", this.monTierTreeTableData)
     }
 
-    // saveConfiguredData(saveMonitorData) {
-    //     this.saveMonitorData = saveMonitorData;
-    // }
-    
+   
     setCompArgsData(data) {
         console.log("data--", data)
-        this.compArgData = data["data"];
+        this.compArgData = data;
     }
-
 
     getTierHeaderList(): any[] {
         return this.tierHeaderList;
@@ -182,17 +214,24 @@ export class MonConfigurationService {
         this.profileDesc = profileDesc;
     }
 
+    
+    setSelectedRow(data) {
+      this.selectedRow = data;
+    }
+
+    getSelectedRow():object {
+      return this.selectedRow;  
+    }
+
     clearData() {
-
         this.topoName = null;
-
         this.profileName = null;
         this.profileDesc = "NA";
-
         this.monTierTreeTableData = null;
-
         this.tierHeaderList = null;
+        this.saveMonitorData = {};
     }
+
 
     /**Method to call service to download(import) selected profile  */
     getMprof(topoName,profileName)
@@ -260,12 +299,112 @@ export class MonConfigurationService {
   }
 
  /**
-  * This functon is used to clear service "saveMonitorData" 
-  * used for storing configured monitor data when new profile is created
+  * 
+  * @param id Function to get the row from treetabledata on basis of Id
   */
-  clearSaveMonData()
+  getSelectedRowOfTreeTableDataById(id)
   {
-   this.saveMonitorData = {};
+     console.log(" id  ", id + " this.monTierTreeTableData  =  " , this.monTierTreeTableData)
+     let rowData =_.find(this.monTierTreeTableData,function(each) {
+                 return each.id == id
+    })
+    return  rowData;
+  }
+ 
+
+ /**
+  *  Function used for updating colorMode and colorName as per operation performed
+  * @param data
+  * @param checkBoxState 
+  * @param tierName 
+  */
+
+  updateColorModeAndName(data,tierName)
+  {
+   console.log("Method updateColorModeAndName Called   data   = ",data)
+   let checkBoxState = data[tierName]['chk'];
+   let colorMode = this.getColorMode(data,checkBoxState,tierName)
+   let tierVal = data[tierName];
+   tierVal['color'] = colorMode;
+   this.updateColorName(tierVal);
+   console.log("data--",data)
   }
 
+
+  getColorMode(data,checkBoxState,tierName)
+  {
+    console.log("data--",data) 
+    console.log("checkBoxState--",checkBoxState) 
+    let monName = data['monitor'];
+    if(checkBoxState)                                                      //checked
+    {
+     if(data['drivenJsonName'] != 'NA')                                   //comp present  
+     {
+      console.log("this.saveMonitorData--",this.saveMonitorData)
+      if(this.saveMonitorData != null && this.saveMonitorData.hasOwnProperty(tierName))
+      {
+       console.log("value of tierName--",this.saveMonitorData[tierName])
+       let monList = this.saveMonitorData[tierName];
+       if(monList != null && monList.length != 0)  //case when user fist configured then removve it safer side
+       {
+        let monObj =  _.find(monList,function(each) { return each.hasOwnProperty(monName)})
+        if(monObj != null)                                                    //configured
+        {
+          return COLOR_CODE.CHECKED_COMPPRESENT_ISCONFIGURED;
+        }
+        else
+        {                                                                      //not configured
+          return COLOR_CODE.CHECKED_COMPPRESENT_NOTCONFIGURED;  
+        }
+       }
+       else
+       {
+         return COLOR_CODE.CHECKED_COMPPRESENT_NOTCONFIGURED;  
+       }
+      }
+      else{
+           return COLOR_CODE.CHECKED_COMPPRESENT_NOTCONFIGURED;             //not configured
+      }
+    } 
+    else //case of System monitors which do not require configurations
+    {
+      return COLOR_CODE.CHECKED_COMPNOPRESENT_NOTCONFIGURED;
+    }
+   }
+   else
+   {
+    //unchecked the checkbox
+     if(data['drivenJsonName'] != 'NA')                                   //comp present  
+     {
+      console.log("this.saveMonitorData--",this.saveMonitorData)
+      if(this.saveMonitorData.hasOwnProperty(tierName))
+      {
+       console.log("value of tierName--",this.saveMonitorData[tierName])
+       let monList = this.saveMonitorData[tierName];
+       if(monList != null && monList.length != 0)  //case when user fist configured then removve it safer side
+       {
+        let monObj =  _.find(monList,function(each) { return each.hasOwnProperty(monName)})
+        if(monObj != null)                                                    //configured
+        {
+         return COLOR_CODE.UNCHECKED_COMPPRESENT_ISCONFIGURED
+        }
+        else
+        {                                                                      //not configured
+         return COLOR_CODE.UNCHECKED_COMPNOPRESENT_NOTCONFIGURED;
+        }
+       }
+       else
+       {
+          return COLOR_CODE.UNCHECKED_COMPPRESENT_NOTCONFIGURED; 
+       }
+      }
+    } 
+    else //case of System monitors which do not require configurations
+    {
+      return COLOR_CODE.UNCHECKED_COMPNOPRESENT_NOTCONFIGURED;
+    }
+
+   }
+ }
+ 
 }

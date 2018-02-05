@@ -11,11 +11,12 @@
       <button pButton type="button" title="Audit log" icon="fa fa-history"></button>
       <!-- <button pButton type="button" title="Hide/Show" icon="fa-search"></button> -->
     </div>
+
     <div class="treeTableToolbar">
       <span> Topology Name :</span> {{topoName}}
       <span> Profile Name :</span> {{profileName}}
     </div>
-  </p-toolbar>
+   </p-toolbar>
   
   <p-panel>
     <p-treeTable class="mon-ui configTreeTable" (onNodeExpand)="loadNode($event)" [value]="compData" selection="false" [style]="{'max-height':'530px', 'overflow':'auto'}">
@@ -31,20 +32,21 @@
   
       <p-column [sortable]="true" [style]="{'width':'40px'}" header="All Tier">
         <template let-col let-data="rowData" pTemplate>
-          <p-checkbox *ngIf="!data.hasOwnProperty('children')" [(ngModel)]="data.data['monitorState']" (click)="onCheckBoxChange()"
+          <p-checkbox *ngIf="!data.hasOwnProperty('children')" [(ngModel)]="data.data['monitorState']" (click)="onCheckBoxChange(data,col.header)"
             binary="false"></p-checkbox>
-          <i class="fa fa-external-link" (click)="advanceSettings(data,'-1','All Tier')" aria-hidden="true"></i>
+          <i class="fa fa-external-link" (click)="advanceSettings(data,'-1','All Tier',data.data[col.header]['chk'])"  aria-hidden="true"></i>
         </template>
       </p-column>
   
       <p-column [style]="{'width':'46px'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header">
         <template let-data="rowData" pTemplate>
-  
+          <div [style.background]="data.data[col.header]['colorName']">
           <p-checkbox *ngIf="!data.hasOwnProperty('children')" [(ngModel)]="data.data[col.field]" (click)="onCheckBoxChange(data.data[col.field],col.header,data.data['monitor'])"
             binary="false"></p-checkbox>
           <a *ngIf="col.field != 'monitor'">
-            <i class="fa fa-external-link" (click)="advanceSettings(data,col.field,col.header)" aria-hidden="true" title="Advance settings"></i>
+            <i class="fa fa-external-link" (click)="advanceSettings(data,col.field,col.header,data.data[col.header]['chk'])" aria-hidden="true" title="Advance settings"></i>
           </a>
+          </div>
         </template>
       </p-column>
   
@@ -54,6 +56,5 @@
       <p-column field="type" header="Type"></p-column>-->
       <!-- </div> -->
     </p-treeTable>
-    <!-- </div> -->
   </p-panel>
   </div>

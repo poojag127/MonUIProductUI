@@ -4,10 +4,9 @@ import {Message, ConfirmationService} from 'primeng/primeng';
 import { MonDataService } from '../../services/mon-data.service';
 
 
-
 @Component({
   selector: 'app-cav-mon-home',
-  templateUrl: './cav-mon-home.component.html',
+  templateUrl: './cav-mon-home.component.html', 
   styleUrls: ['./cav-mon-home.component.css']
 })
 export class CavMonHomeComponent implements OnInit {
