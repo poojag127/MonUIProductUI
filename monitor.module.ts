@@ -13,7 +13,7 @@ import { Logger, Options as LoggerOptions, Level as LoggerLevel } from '../../..
 import { AccordionModule, DataTableModule, ContextMenuModule, MultiSelectModule, 
   ConfirmDialogModule, InputTextModule, ButtonModule, DialogModule, DropdownModule, FieldsetModule, RadioButtonModule,
   CheckboxModule, ListboxModule, InputTextareaModule, TreeTableModule,SharedModule, FileUploadModule, PaginatorModule, PanelModule, SpinnerModule,
-  GrowlModule,BreadcrumbModule,MessagesModule
+  GrowlModule,BreadcrumbModule,MessagesModule,ToolbarModule
 } from 'primeng/primeng';
 
 import { BlockUIModule } from 'ng-block-ui';
@@ -116,6 +116,7 @@ import { CavMonContentsComponent } from './components/cav-mon-contents/cav-mon-c
     GrowlModule,
     BreadcrumbModule,
     MessagesModule,
+    ToolbarModule,
     StoreModule.provideStore({ monitorData: MonitorReducer ,selectedMon:MonitorCompReducer}),
   ],
   providers: [
