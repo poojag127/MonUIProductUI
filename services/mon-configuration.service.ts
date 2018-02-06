@@ -366,6 +366,9 @@ export class MonConfigurationService {
    tierVal['color'] = colorMode;
    this.updateColorName(tierVal);
    console.log("data--",data)
+   //updating checkboxStateArr used in validation
+   let key = data['monitor'] + ":"+ tierName;
+   this.addUpdateCheckBoxStateArr(tierVal,key);
   }
 
 

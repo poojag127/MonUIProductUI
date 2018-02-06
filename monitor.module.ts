@@ -28,7 +28,8 @@ import { CavMonToolbarComponent } from './components/cav-mon-configuration-home/
 import { CavMonStatsComponent } from './components/cav-mon-configuration-home/cav-mon-stats/cav-mon-stats.component';
 import { CavMonHideShowComponent } from './components/cav-mon-configuration-home/cav-mon-hide-show/cav-mon-hide-show.component';
 import { CavMonHomeComponent } from './components/cav-mon-home/cav-mon-home.component';
-import { CavMonRightPaneComponent } from './components/cav-mon-right-pane/cav-mon-right-pane.component';
+import { CavMonContentsComponent } from './components/cav-mon-contents/cav-mon-contents.component';
+// import { CavMonRightPaneComponent } from './components/cav-mon-right-pane/cav-mon-right-pane.component';
 
 //services
 import { MonDataService } from './services/mon-data.service';
@@ -50,7 +51,7 @@ import { MonitorRoutingModule } from './routes/monitor-routing.routes';
 import { MonitorReducer } from './reducers/monitor-reducer';
 import { MonitorCompReducer } from './reducers/monitor-comp-reducer';
 
-import { CavMonContentsComponent } from './components/cav-mon-contents/cav-mon-contents.component';
+// import { CavMonContentsComponent } from './components/cav-mon-contents/cav-mon-contents.component';
 
 
 @NgModule({
@@ -80,7 +81,6 @@ import { CavMonContentsComponent } from './components/cav-mon-contents/cav-mon-c
 
   CavMonHomeComponent,
 
-  CavMonRightPaneComponent,
 
   CavMonContentsComponent
   

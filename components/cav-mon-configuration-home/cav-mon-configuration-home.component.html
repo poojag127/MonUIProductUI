@@ -41,7 +41,7 @@
       <p-column [style]="{'width':'46px'}" *ngFor="let col of cols" [field]="col.field" [header]="col.header">
         <template let-data="rowData" pTemplate>
           <div [style.background]="data.data[col.header]['colorName']">
-          <p-checkbox *ngIf="!data.hasOwnProperty('children')" [(ngModel)]="data.data[col.field]" (click)="onCheckBoxChange(data.data[col.field],col.header,data.data['monitor'])"
+          <p-checkbox *ngIf="!data.hasOwnProperty('children')" [(ngModel)]="data.data[col.header]['chk']" (click)="onCheckBoxChange(data,col.header)"
             binary="false"></p-checkbox>
           <a *ngIf="col.field != 'monitor'">
             <i class="fa fa-external-link" (click)="advanceSettings(data,col.field,col.header,data.data[col.header]['chk'])" aria-hidden="true" title="Advance settings"></i>

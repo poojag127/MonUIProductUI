@@ -16,6 +16,7 @@ export class MonProfileService {
 
     getTopologyList() 
     {
+     console.log("Method  getTopologyList called")
      return this._restApi.getDataByGetReq(this.monDataService.getserviceURL() + URL.GET_TOPO_LIST);
     }
 

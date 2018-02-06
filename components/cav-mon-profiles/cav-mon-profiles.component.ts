@@ -42,6 +42,9 @@ export class CavMonProfilesComponent implements OnInit {
   constructor(public dataService: MonDataService, private router: Router, private profileService: MonProfileService, private utilityObj: UtilityService, private monConfServiceObj: MonConfigurationService, private messageService: MessageService) { }
 
   ngOnInit() {
+
+    console.log("Class CavMonProfilesComponent called")
+    
     //this method set the parameters come from the product UI
     this.setMonDefaultDataInDataService();
 
